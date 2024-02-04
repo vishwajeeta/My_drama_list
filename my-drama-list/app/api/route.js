@@ -4,7 +4,7 @@ const fs =require( 'fs');
 const path =require( 'path');
 const jsonFilePath = path.resolve('app/api/data/dramas.json');
 
-export const  GET = async(request)=>{
+export const  getDramas = async(request)=>{
     // const getDramas = () => {
     try{
         const data = fs.readFileSync(jsonFilePath, 'utf-8');
@@ -24,12 +24,12 @@ const saveDramas = (dramaList) => {
 
 export default   async (req, res) => {
     if (req.method === 'GET') {
-        const dramas = GET();
+        const dramas = getDramas();
         res.status(200).json(dramas);
     } else if (req.method === 'POST') {
         const newDrama = req.body;
         
-        const dramaList = GET();
+        const dramaList = getDramas();
         dramaList.push(newDrama);
         saveDramas(dramaList);
         res.status(200).json({ success: true });

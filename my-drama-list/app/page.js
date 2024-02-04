@@ -1,19 +1,21 @@
 "use client"
 import React, { useState } from 'react';
+import { NextRequest } from 'next/server';
 
 const HomePage = ({ dramaList }) => {
     const [newDrama, setNewDrama] = useState({ name: '', image: '', ranking: '' });
 
     const handleAddDrama = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api', {
+            const response =  new NextRequest("http://localhost:3000/api", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newDrama),
+                
             });
-
+            
             if (response.ok) {
                 // Refresh the page after adding a new drama
                 window.location.reload();
@@ -70,7 +72,7 @@ const HomePage = ({ dramaList }) => {
 
 HomePage.getInitialProps = async () => {
     // Fetch initial data from the server (on the server-side)
-    const res = await fetch('http://localhost:3000/api');
+    const res = new NextRequest("http://localhost:3000/api");
     const data = await res.json();
 
     return { dramaList: data };
