@@ -5,6 +5,7 @@ const path =require( 'path');
 const jsonFilePath = path.resolve('app/api/data/dramas.json');
 
 export const  GET = async(request)=>{
+    // const getDramas = () => {
     try{
         const data = fs.readFileSync(jsonFilePath, 'utf-8');
         console.log(data)
@@ -15,4 +16,24 @@ export const  GET = async(request)=>{
         return NextResponse.json([]);
     }
 }
- 
+
+
+const saveDramas = (dramaList) => {
+    fs.writeFileSync(jsonFilePath, JSON.stringify(dramaList, null, 2));
+};
+
+export default   async (req, res) => {
+    if (req.method === 'GET') {
+        const dramas = GET();
+        res.status(200).json(dramas);
+    } else if (req.method === 'POST') {
+        const newDrama = req.body;
+        
+        const dramaList = GET();
+        dramaList.push(newDrama);
+        saveDramas(dramaList);
+        res.status(200).json({ success: true });
+    } else {
+        res.status(405).json({ error: 'Method not allowed' });
+    }
+};
